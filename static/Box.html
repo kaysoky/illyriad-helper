@@ -1,0 +1,53 @@
+<div id="IllyHelperBox" class="smallBorder">
+    <div class="headLinks">
+        <button id="MarketButton">Market Helper</button>
+        <button>More buttons?</button>
+    </div>
+    <div id="MarketHelperBox" style="display:none">
+        <div class="subLinks">
+            <a class="selected">{CaravanHTML} Resource Finder</a>
+        </div>
+        <div style="margin-left:10px;margin-right:10px">
+            <span style="text-align:justify;">
+                This helper scans a square around the world map starting
+                from your selected city and filters out locations with
+                Caravan-gather-able resources.  This information is
+                only updated when you click the <u><b>Market Helper</b></u>
+                button at the top of this box.
+                <br><br>
+                The search automatically filters out resources that are:
+                <ul>
+                    <li>occupied by armies</li>
+                    <li>occupied by other gatherers</li>
+                    <li>claimed by sovereignty</li>
+                </ul>
+                This filtering helps you stay "polite" with your gathering.
+                <br><br>
+                Every time you click the <u><b>Send!</b></u> button, the helper
+                will dispatch a <b>single</b> caravan to that location.
+                Sending a single caravan maximizes your gathering speed,
+                lowers the chance of all your gatherers being "interrupted",
+                and lowers the chance of over-committing caravans to a
+                tiny patch of resources.
+            </span>
+        </div>
+        <div>Available {CaravanHTML} s: <span id="AvailableCaravans">???</span></div>
+        <div>Filters:
+            <input class="MarketHelperCheck" type="checkbox" value="1" checked /> {WoodHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="2" checked /> {ClayHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="3" checked /> {IronHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="4" checked /> {StoneHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="5" checked /> {FoodHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="6" checked /> {GoldHTML}
+        </div>
+        <table id="MarketHelperTable" class="generic evenodd middle center">
+            <tr>
+                <th>Coordinates</th>
+                <th>Distance</th>
+                <th>Resource</th>
+                <th>Action</th>
+            </tr>
+        </table>
+        <div id="MarketHelperSpinner" class="ui-autocomplete-loading"></div>
+    </div>
+</div>

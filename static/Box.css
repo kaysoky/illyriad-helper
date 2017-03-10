@@ -1,0 +1,14 @@
+#IllyHelperBox {
+    position   : absolute;
+    top        : 0px;
+    left       : 1020px;
+    height     : calc(100% - 20px);
+    width      : calc(100% - 1040px);
+    overflow-y : scroll;
+}
+
+#MarketHelperSpinner {
+    width            : 50%;
+    height           : 16px;
+    background-color : transparent;
+}
