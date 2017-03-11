@@ -8,7 +8,7 @@ var ZOOM = 12;
 var WORLD_DATA_WIDTH = 2 * ZOOM + 1;
 
 // How many squares to search to the North/East/South/West of your town
-var SEARCH_RADIUS = 4;
+var SEARCH_RADIUS = 3;
 
 // Returns the coordinates of the active town
 function GetTownCoordinates() {
@@ -25,7 +25,7 @@ function FreeCaravanHelper(data) {
             return data[i].Available;
         }
     }
-    
+
     return 0;
 }
 
@@ -56,18 +56,30 @@ function MarketHelper() {
     });
 
     // Figure out what caravans are currently enroute
-    /*
+    var time = '_=' + (new Date).getTime();
+    var outbound = new Set()
     $.ajax({
         type: 'POST',
-        url: '/Trade/Movements',
-        async: true,
-        data: '_=' + (new Date).getTime()
+        url: '/Trade/Movements?' + time,
+        async: false,
+        data: time
     }).done(function (data) {
+        var data = $(data)
+            .find('legend:contains("outbound trade")')
+            .parent()
+            .find('table')
+            .find('tr').not(':first');
 
+        for (var i = 0; i < data.length; i++) {
+            var [oX, oY] = data.eq(i)
+                .find('td:nth-child(3)')
+                .text().split('[@l=')[1]
+                .split('|');
+            outbound.add(oY + '|' + oX);
+        }
     }).fail(function () {
         alert('Failed to fetch dispatched caravans');
     });
-    */
 
     // Aggregator for the parsed world data
     var resources = [];
@@ -88,6 +100,11 @@ function MarketHelper() {
 
             // Exclude resources that are already being gathered
             if (data.n[bunch].rd) {
+                continue;
+            }
+
+            // Exclude resources that you are already sending a caravan towards
+            if (outbound.has(bunch)) {
                 continue;
             }
 
