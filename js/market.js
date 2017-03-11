@@ -64,19 +64,29 @@ function MarketHelper() {
         async: false,
         data: time
     }).done(function (data) {
-        var data = $(data)
-            .find('legend:contains("outbound trade")')
-            .parent()
-            .find('table')
-            .find('tr').not(':first');
+        var data = $(data);
 
-        for (var i = 0; i < data.length; i++) {
-            var [oX, oY] = data.eq(i)
-                .find('td:nth-child(3)')
-                .text().split('[@l=')[1]
-                .split('|');
-            outbound.add(oY + '|' + oX);
+        // Helper function that searches for a fieldset with the given legend
+        // and then extracts coordinates from the n-th field of the underlying
+        // table.  The results are stored in the parent's `outbound` set.
+        function ParseTradeMovements(search, index) {
+            var rows = data
+                .find('legend:contains("' + search + '")')
+                .parent()
+                .find('table')
+                .find('tr').not(':first');
+
+            for (var i = 0; i < rows.length; i++) {
+                var [oX, oY] = rows.eq(i)
+                    .find('td:nth-child(' + index + ')')
+                    .text().split('[@l=')[1]
+                    .split('|');
+                outbound.add(oY + '|' + oX);
+            }
         }
+
+        ParseTradeMovements('outbound trade', 3);
+        ParseTradeMovements('trade units elsewhere', 5);
     }).fail(function () {
         alert('Failed to fetch dispatched caravans');
     });
