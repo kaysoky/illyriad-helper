@@ -77,16 +77,21 @@ function MarketHelper() {
                 .find('tr').not(':first');
 
             for (var i = 0; i < rows.length; i++) {
-                var [oX, oY] = rows.eq(i)
+                var text = rows.eq(i)
                     .find('td:nth-child(' + index + ')')
-                    .text().split('[@l=')[1]
-                    .split('|');
+                    .text();
+
+                // Skip outbound trade that isn't headed towards a "location"
+                if (text.indexOf('[@l=') === -1) {
+                    continue;
+                }
+
+                var [oX, oY] = text.split('[@l=')[1].split('|');
                 outbound.add(oY + '|' + oX);
             }
         }
 
         ParseTradeMovements('outbound trade', 3);
-        ParseTradeMovements('trade units elsewhere', 5);
     }).fail(function () {
         alert('Failed to fetch dispatched caravans');
     });
