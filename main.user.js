@@ -20,7 +20,7 @@ var CaravanHTML =
     + '</span>';
 var CotterHTML =
     '<span class="name" data="i=5|683">'
-        + '<img src="//assets.illyriad.net/img/icons/trade/peasant_dwarf2_24.png" title="Cotters">'
+        + '<img src="//assets.illyriad.net/img/icons/trade/peasant_dwarf2_24.png" title="Cotters" />'
     + '</span>';
 
 var GoldHTML = '<span class="name resIcon ico-gold" data="i=4|1" title="Gold"></span>';
@@ -32,31 +32,49 @@ var FoodHTML = '<span class="name resIcon ico-food" data="i=1|5" title="Food"></
 var HidesHTML = '<span class="name base pelts_24" data="c=186" title="Hides"></span>';
 var HerbsHTML = '<span class="name itemsprite herbs_24" data="c=416" title="Herbs"></span>';
 var MineralsHTML = '<span class="name base crystals_24" data="c=417" title="Minerals"></span>';
+var EquipHTML = '<img src="//assets.illyriad.net/img/icons/equip_48.png" style="width:24px;height:24px" />'
+var SaltsHTML = '<img src="//assets.illyriad.net/img/icons/salts.png" style="width:24px;height:24px" />'
+var RareHerbsHTML = '<img src="//assets.illyriad.net/img/icons/herbs.png" style="width:24px;height:24px" />'
+var GemsHTML = '<img src="//assets.illyriad.net/img/icons/gem.png" style="width:24px;height:24px" />'
+var GrapesHTML = '<img src="//assets.illyriad.net/img/icons/grapes_48.png" style="width:24px;height:24px" />'
+var PawsHTML = '<img src="//assets.illyriad.net/img/icons/paws_48.png" style="width:24px;height:24px" />'
 var ResourceIcons = [
-    'undefined',
+    'undefined',  // 0
     WoodHTML,
     ClayHTML,
     IronHTML,
     StoneHTML,
-    FoodHTML,
+    FoodHTML,     // 5
     GoldHTML,
     HidesHTML,
     HerbsHTML,
     MineralsHTML,
+    EquipHTML,    // 10
+    SaltsHTML,
+    RareHerbsHTML,
+    GemsHTML,
+    GrapesHTML,
+    PawsHTML,     // 15
 ];
 
 var HTML_TEMPLATE = {
-    'CaravanHTML'  : CaravanHTML,
-    'CotterHTML'   : CotterHTML,
-    'WoodHTML'     : WoodHTML,
-    'ClayHTML'     : ClayHTML,
-    'IronHTML'     : IronHTML,
-    'StoneHTML'    : StoneHTML,
-    'FoodHTML'     : FoodHTML,
-    'GoldHTML'     : GoldHTML,
-    'HidesHTML'    : HidesHTML,
-    'HerbsHTML'    : HerbsHTML,
-    'MineralsHTML' : MineralsHTML,
+    'CaravanHTML'   : CaravanHTML,
+    'CotterHTML'    : CotterHTML,
+    'WoodHTML'      : WoodHTML,
+    'ClayHTML'      : ClayHTML,
+    'IronHTML'      : IronHTML,
+    'StoneHTML'     : StoneHTML,
+    'FoodHTML'      : FoodHTML,
+    'GoldHTML'      : GoldHTML,
+    'HidesHTML'     : HidesHTML,
+    'HerbsHTML'     : HerbsHTML,
+    'MineralsHTML'  : MineralsHTML,
+    'EquipHTML'     : EquipHTML,
+    'SaltsHTML'     : SaltsHTML,
+    'RareHerbsHTML' : RareHerbsHTML,
+    'GemsHTML'      : GemsHTML,
+    'GrapesHTML'    : GrapesHTML,
+    'PawsHTML'      : PawsHTML,
 }
 
 String.prototype.replaceAll = function (search, replace) {

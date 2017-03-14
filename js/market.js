@@ -158,6 +158,11 @@ function MarketHelper(target) {
                     return false;
                 }
 
+                // Exclude resources that are on towns
+                if (data.t[bunch]) {
+                    return false;
+                }
+
                 // Exclude resources that are already being gathered
                 if (data.n[bunch] && data.n[bunch].rd) {
                     return false;
@@ -258,27 +263,33 @@ function MarketHelper(target) {
                                 forCotter = true;
                                 break;
                             case 3:
-                                images += 'Equipment';
+                                images += EquipHTML;
+                                enums.push(10);
                                 forCotter = true;
                                 break;
                             case 4:
-                                // images += 'Elemental Salts';
+                                images += SaltsHTML;
+                                enums.push(11);
                                 forSkinner = true;
                                 break;
                             case 5:
-                                // images += 'Rare Herbs';
+                                images += RareHerbsHTML;
+                                enums.push(12);
                                 forHerbalist = true;
                                 break;
                             case 6:
-                                // images += 'Rare Minerals';
+                                images += GemsHTML;
+                                enums.push(13);
                                 forMiner = true;
                                 break;
                             case 7:
-                                images += 'Grapes';
+                                images += GrapesHTML;
+                                enums.push(14);
                                 forCotter = true;
                                 break;
                             case 8:
-                                // images += 'Animal Parts';
+                                images += PawsHTML;
+                                enums.push(15);
                                 forSkinner = true;
                                 break;
                         }
