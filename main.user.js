@@ -36,7 +36,7 @@ var EquipHTML = '<img src="//assets.illyriad.net/img/icons/equip_48.png" style="
 var SaltsHTML = '<img src="//assets.illyriad.net/img/icons/salts.png" style="width:24px;height:24px" />'
 var RareHerbsHTML = '<img src="//assets.illyriad.net/img/icons/herbs.png" style="width:24px;height:24px" />'
 var GemsHTML = '<img src="//assets.illyriad.net/img/icons/gem.png" style="width:24px;height:24px" />'
-var GrapesHTML = '<img src="//assets.illyriad.net/img/icons/grapes_48.png" style="width:24px;height:24px" />'
+var GrapesHTML = '<span class="name base grapes_24" data="c=253" title="Grapes"></span>'
 var PawsHTML = '<img src="//assets.illyriad.net/img/icons/paws_48.png" style="width:24px;height:24px" />'
 var ResourceIcons = [
     'undefined',  // 0
