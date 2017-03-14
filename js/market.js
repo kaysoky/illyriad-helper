@@ -2,14 +2,6 @@
  * This file contains the Javascript backing the `Market Helper` tab
  */
 
-// Determines the amount of data returned by /World/MapData
-// The result is a square of width (2 * ZOOM + 1)
-var ZOOM = 12;
-var WORLD_DATA_WIDTH = 2 * ZOOM + 1;
-
-// How many squares to search to the North/East/South/West of your town
-var SEARCH_RADIUS = 3;
-
 // Returns the coordinates of the active town
 function GetTownCoordinates() {
     var center = $('.cityMenu.selected > div:nth-child(5) > span:first')
@@ -68,6 +60,16 @@ function MarketHelper(target) {
     // Clean up the table of resources
     $('#MarketHelperTable tr').not(':first').remove();
 
+    // Determines the amount of data returned by /World/MapData
+    // The result is a square of width (2 * ZOOM + 1)
+    var ZOOM = parseInt($('#MarketZoomLevel').val());
+    ZOOM = Math.max(0, Math.min(25, ZOOM));
+    var WORLD_DATA_WIDTH = 2 * ZOOM + 1;
+
+    // How many squares to search to the North/East/South/West of your town
+    var SEARCH_RADIUS = parseInt($('#MarketSearchRadius').val());
+    SEARCH_RADIUS = Math.max(0, SEARCH_RADIUS);
+
     var [X, Y] = GetTownCoordinates();
 
     // Figure out the number of free caravans
@@ -84,6 +86,8 @@ function MarketHelper(target) {
             if (data[i].Name === 'Caravan') {
                 caravans = data[i].Available;
             } else if (data[i].Name === 'Cotter') {
+                // TODO: Use this to determine the "UnitId" of the cotter
+                // There is a different ID for each race
                 cotters = data[i].Available;
             }
         }
