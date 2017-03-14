@@ -17,7 +17,7 @@ function GetTownCoordinates() {
     return [parseInt(center[0]), parseInt(center[1])];
 }
 
-// Helper that calls a (synchronous) lambda for each town you own
+// Helper that calls a (asynchronous) lambda for each town you own
 // The town is switched back to the original one after all calls
 // and the `continuation` will be called at that point
 // Note: The actual page does not change, so data should only be gathered
@@ -44,34 +44,22 @@ function ForEachTown(lambda, continuation) {
     // Used to run a lambda asynchronously over each town
     function TownLooper() {
         var next = towns.pop();
-        lambda();
-        if (next) {
-            SwitchTown(next, TownLooper);
-        } else {
-            // Switch back to the original town
-            SwitchTown(original, continuation);
-        }
+        lambda(function () {
+            if (next) {
+                SwitchTown(next, TownLooper);
+            } else {
+                // Switch back to the original town
+                SwitchTown(original, continuation);
+            }
+        });
     }
 
     SwitchTown(towns.pop(), TownLooper);
 }
 
-// Parse the result of POST /Trade/PopupHarvesting
-// For the number of available caravans
-function FreeCaravanHelper(data) {
-    for (var i = 0; i < data.length; i++) {
-        if (data[i].Name === 'Caravan') {
-            return data[i].Available;
-        }
-    }
-
-    return 0;
-}
-
-// Event handler for clicking the `Market Helper` button
-function MarketHelper() {
-    // Reset the view of the associated boxes
-    $('#MarketHelperBox').show();
+// Fills in the market table based on the "target", which is either
+// "Caravan" or "Cotter".  Different resources will show up in the table
+function MarketHelper(target) {
     $('#MarketHelperSpinner').show();
 
     // Reset the filter checkboxes
@@ -89,7 +77,19 @@ function MarketHelper() {
         async: true,
         data: 'SendX=' + X + '&SendY=' + Y
     }).done(function (data) {
-        $('#AvailableCaravans').text(FreeCaravanHelper(data));
+        var caravans = 0;
+        var cotters = 0;
+
+        for (var i = 0; i < data.length; i++) {
+            if (data[i].Name === 'Caravan') {
+                caravans = data[i].Available;
+            } else if (data[i].Name === 'Cotter') {
+                cotters = data[i].Available;
+            }
+        }
+
+        $('#AvailableCaravans').text(caravans);
+        $('#AvailableCotters').text(cotters);
     }).fail(function () {
         alert('Failed to figure out number of free caravans');
     });
@@ -98,16 +98,17 @@ function MarketHelper() {
     var time = '_=' + (new Date).getTime();
     var outbound = new Set();
 
-    ForEachTown(function () {
+    ForEachTown(function (continuation) {
         $.ajax({
             type: 'POST',
             url: '/Trade/Movements?' + time,
-            async: false,
+            async: true,
             data: time
         }).done(function (data) {
             var data = $(data);
 
-            // Helper function that searches for a fieldset with the given legend
+            // Parses the result of POST /Trade/Movements
+            // This helper function searches for a fieldset with the given legend
             // and then extracts coordinates from the n-th field of the underlying
             // table.  The results are stored in the parent's `outbound` set.
             function ParseTradeMovements(search, index) {
@@ -133,6 +134,8 @@ function MarketHelper() {
             }
 
             ParseTradeMovements('outbound trade', 3);
+
+            continuation();
         }).fail(function () {
             alert('Failed to fetch dispatched caravans');
         });
@@ -143,27 +146,33 @@ function MarketHelper() {
 
         // Helper that parse and filters each set of world map data
         function WorldMapParser(data) {
-            for (var bunch in data.n) {
+            // Helper for filtering out spots that are already occupied
+            function CheckAvailability(bunch) {
                 // Exclude resources that are occupied by any army
                 if (data.c[bunch]) {
-                    continue;
+                    return false;
                 }
 
                 // Exclude resources that are on sovereign territory
                 if (data.s[bunch]) {
-                    continue;
+                    return false;
                 }
 
                 // Exclude resources that are already being gathered
-                if (data.n[bunch].rd) {
-                    continue;
+                if (data.n[bunch] && data.n[bunch].rd) {
+                    return false;
                 }
 
                 // Exclude resources that you are already sending a caravan towards
                 if (outbound.has(bunch)) {
-                    continue;
+                    return false;
                 }
 
+                return true;
+            }
+
+            // Helper for parsing a data key into X, Y, and distance
+            function ParseCoordinates(bunch) {
                 // NOTE: The returned coordinates are in form: {Y, X}
                 var coords = bunch.split('|');
                 var rX = parseInt(coords[1]);
@@ -171,26 +180,134 @@ function MarketHelper() {
                 var distance = Math.round(
                         Math.sqrt(Math.pow(X - rX, 2) + Math.pow(Y - rY, 2))
                     * 100) / 100;
-                var type = parseInt(data.n[bunch].i);
 
-                if (type > 0 && type <= 6) {
+                return [rX, rY, distance];
+            }
+
+            // Populate the caravan-compatible resources
+            if (target === 'Caravan') {
+                for (var bunch in data.n) {
+                    if (!CheckAvailability(bunch)) {
+                        continue;
+                    }
+
+                    var [rX, rY, distance] = ParseCoordinates(bunch);
+                    var type = parseInt(data.n[bunch].i);
+
+                    if (type > 0 && type <= 6) {
+                        resources.push({
+                            'distance' : distance,
+                            'data' : '<tr class="MarketHelperRow-' + type + '">'
+                                + '<td><a href="#/World/Map/' + rX + '/' + rY + '">' + rX + '|' + rY + '</a></td>'
+                                + '<td>' + distance + '</td>'
+                                + '<td>' + ResourceIcons[type] + '</td>'
+                                + '<td>'
+                                    + '<input class="short MarketHelperButton" '
+                                        + 'type="submit" '
+                                        + 'value="Send!" '
+                                        + 'query="'
+                                            + 'SendX=' + rX
+                                            + '&SendY=' + rY
+                                            + '&UnitId=1'
+                                            + '&Quantity=1'
+                                    + '" />'
+                                + '</td>'
+                            + '</tr>'
+                        });
+                    }
+                }
+            }
+
+            // Populate the cotter, miner, herbalist, or skinner resources
+            if (target === 'Cotter') {
+                for (var bunch in data.d) {
+                    if (!CheckAvailability(bunch)) {
+                        continue;
+                    }
+
+                    var [rX, rY, distance] = ParseCoordinates(bunch);
+
+                    var flags = data.d[bunch].split('|');
+                    var images = '';
+                    var enums = ['', ];
+                    var forCotter = false;
+                    var forSkinner = false;
+                    var forHerbalist = false;
+                    var forMiner = false;
+
+                    // Map the data to the respective image and worker type
+                    for (var i = 0; i < 9; i++) {
+                        if (flags[i] === '0') {
+                            continue;
+                        }
+
+                        switch (i) {
+                            case 0:
+                                images += HidesHTML;
+                                enums.push(7);
+                                forCotter = true;
+                                break;
+                            case 1:
+                                images += HerbsHTML;
+                                enums.push(8);
+                                forCotter = true;
+                                break;
+                            case 2:
+                                images += MineralsHTML;
+                                enums.push(9);
+                                forCotter = true;
+                                break;
+                            case 3:
+                                images += 'Equipment';
+                                forCotter = true;
+                                break;
+                            case 4:
+                                // images += 'Elemental Salts';
+                                forSkinner = true;
+                                break;
+                            case 5:
+                                // images += 'Rare Herbs';
+                                forHerbalist = true;
+                                break;
+                            case 6:
+                                // images += 'Rare Minerals';
+                                forMiner = true;
+                                break;
+                            case 7:
+                                images += 'Grapes';
+                                forCotter = true;
+                                break;
+                            case 8:
+                                // images += 'Animal Parts';
+                                forSkinner = true;
+                                break;
+                        }
+                    }
+
+                    var buttons = '';
+                    if (forCotter) {
+                        buttons +=
+                            '<input class="short MarketHelperButton" '
+                                + 'type="submit" '
+                                + 'value="Cotter" '
+                                + 'query="'
+                                    + 'SendX=' + rX
+                                    + '&SendY=' + rY
+                                    + '&UnitId=683'
+                                    + '&Quantity=1'
+                            + '" />'
+                    } else {
+                        continue;
+                    }
+                    // TODO: Add buttons for Skinners, Herbalists, and Miners
+
                     resources.push({
                         'distance' : distance,
-                        'data' : '<tr class="MarketHelperRow-' + type + '">'
+                        'data' : '<tr class="' + enums.join(' MarketHelperRow-') + '">'
                             + '<td><a href="#/World/Map/' + rX + '/' + rY + '">' + rX + '|' + rY + '</a></td>'
                             + '<td>' + distance + '</td>'
-                            + '<td>' + ResourceIcons[type] + '</td>'
-                            + '<td>'
-                                + '<input class="short MarketHelperButton" '
-                                    + 'type="submit" '
-                                    + 'value="Send!" '
-                                    + 'query="'
-                                        + 'SendX=' + rX
-                                        + '&SendY=' + rY
-                                        + '&UnitId=1'
-                                        + '&Quantity=1'
-                                + '" />'
-                            + '</td>'
+                            + '<td>' + images + '</td>'
+                            + '<td>' + buttons + '</td>'
                         + '</tr>'
                     });
                 }
@@ -207,14 +324,6 @@ function MarketHelper() {
 
                 // Add a button listener for the "Send!" buttons on each row
                 $('#MarketHelperTable').find('.MarketHelperButton').click(function () {
-                    var available = parseInt($('#AvailableCaravans').text());
-                    if (!available) {
-                        return;
-                    }
-
-                    // Decrement the available caravans
-                    $('#AvailableCaravans').text('' + (available - 1));
-
                     // Send the caravan!
                     var query = $(this).attr('query');
                     $.ajax({
@@ -223,7 +332,7 @@ function MarketHelper() {
                         async: true,
                         data: query
                     }).fail(function () {
-                        alert('Failed to send caravans to ' + query);
+                        alert('Failed to send gatherers to ' + query);
                     });
 
                     // Delete the row

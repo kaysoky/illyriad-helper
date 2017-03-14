@@ -1,4 +1,4 @@
-// ==UserScript==
+﻿// ==UserScript==
 // @name        Illyriad Helpers
 // @namespace   hoagies
 // @description Adds some UI helpers to the base game to make specific repetitive things easier
@@ -18,6 +18,10 @@ var CaravanHTML =
     '<span class="name" data="i=5|1">'
         + '<img src="//assets.illyriad.net/img/icons/trade/caravan_24.png" title="Caravans" />'
     + '</span>';
+var CotterHTML =
+    '<span class="name" data="i=5|683">'
+        + '<img src="//assets.illyriad.net/img/icons/trade/peasant_dwarf2_24.png" title="Cotters">'
+    + '</span>';
 
 var GoldHTML = '<span class="name resIcon ico-gold" data="i=4|1" title="Gold"></span>';
 var WoodHTML = '<span class="name resIcon ico-wood" data="i=1|1" title="Wood"></span>';
@@ -25,6 +29,9 @@ var ClayHTML = '<span class="name resIcon ico-clay" data="i=1|2" title="Clay"></
 var IronHTML = '<span class="name resIcon ico-iron" data="i=1|3" title="Iron"></span>';
 var StoneHTML = '<span class="name resIcon ico-stone" data="i=1|4" title="Stone"></span>';
 var FoodHTML = '<span class="name resIcon ico-food" data="i=1|5" title="Food"></span>';
+var HidesHTML = '<span class="name base pelts_24" data="c=186" title="Hides"></span>';
+var HerbsHTML = '<span class="name itemsprite herbs_24" data="c=416" title="Herbs"></span>';
+var MineralsHTML = '<span class="name base crystals_24" data="c=417" title="Minerals"></span>';
 var ResourceIcons = [
     'undefined',
     WoodHTML,
@@ -33,16 +40,23 @@ var ResourceIcons = [
     StoneHTML,
     FoodHTML,
     GoldHTML,
+    HidesHTML,
+    HerbsHTML,
+    MineralsHTML,
 ];
 
 var HTML_TEMPLATE = {
-    'CaravanHTML' : CaravanHTML,
-    'WoodHTML'    : WoodHTML,
-    'ClayHTML'    : ClayHTML,
-    'IronHTML'    : IronHTML,
-    'StoneHTML'   : StoneHTML,
-    'FoodHTML'    : FoodHTML,
-    'GoldHTML'    : GoldHTML
+    'CaravanHTML'  : CaravanHTML,
+    'CotterHTML'   : CotterHTML,
+    'WoodHTML'     : WoodHTML,
+    'ClayHTML'     : ClayHTML,
+    'IronHTML'     : IronHTML,
+    'StoneHTML'    : StoneHTML,
+    'FoodHTML'     : FoodHTML,
+    'GoldHTML'     : GoldHTML,
+    'HidesHTML'    : HidesHTML,
+    'HerbsHTML'    : HerbsHTML,
+    'MineralsHTML' : MineralsHTML,
 }
 
 String.prototype.replaceAll = function (search, replace) {
@@ -59,12 +73,23 @@ function PlaceButtons() {
         sidebar = sidebar.replaceAll('{' + key + '}', HTML_TEMPLATE[key]);
     }
     $('body').append(sidebar);
-    
+
     // Load the special sidebar CSS
     GM_addStyle(GM_getResourceText('Box_CSS'));
-    
+
     // Install the Market Helper button listener
-    $('#MarketButton').click(MarketHelper);
+    $('#MarketButton').click(function () {
+        // Reset the view of the associated boxes
+        $('#MarketHelperBox').show();
+    });
+
+    // Install the top-level Market helper button listeners
+    $('#CaravanResourceFinder').click(function () {
+        MarketHelper('Caravan');
+    });
+    $('#CotterResourceFinder').click(function () {
+        MarketHelper('Cotter');
+    });
 
     // Install the Market Helper filter checkboxes
     $('#MarketHelperBox').find('.MarketHelperCheck').click(function () {

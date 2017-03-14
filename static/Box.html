@@ -1,19 +1,23 @@
 <div id="IllyHelperBox" class="smallBorder">
     <div class="headLinks">
-        <button id="MarketButton">Market Helper</button>
+        <button id="MarketButton">Market</button>
         <button>More buttons?</button>
     </div>
     <div id="MarketHelperBox" style="display:none">
         <div class="subLinks">
-            <a class="selected">{CaravanHTML} Resource Finder</a>
+            <a id="CaravanResourceFinder"> Caravan
+                <img src="//assets.illyriad.net/img/icons/trade/caravan_24.png" />
+            </a>
+            <a id="CotterResourceFinder"> Cotter
+                <img src="//assets.illyriad.net/img/icons/trade/peasant_dwarf2_24.png" />
+            </a>
+            Resource Finder
         </div>
         <div style="margin-left:10px;margin-right:10px">
             <span style="text-align:justify;">
                 This helper scans a square around the world map starting
                 from your selected city and filters out locations with
-                Caravan-gather-able resources.  This information is
-                only updated when you click the <u><b>Market Helper</b></u>
-                button at the top of this box.
+                gather-able resources.
                 <br><br>
                 The search automatically filters out resources that are:
                 <ul>
@@ -25,13 +29,28 @@
                 <br><br>
                 Every time you click the <u><b>Send!</b></u> button, the helper
                 will dispatch a <b>single</b> caravan to that location.
-                Sending a single caravan maximizes your gathering speed,
-                lowers the chance of all your gatherers being "interrupted",
-                and lowers the chance of over-committing caravans to a
-                tiny patch of resources.
+                Sending a single caravan:
+                <ul>
+                    <li>maximizes your gathering speed</li>
+                    <li>lowers the chance of all your gatherers being "interrupted"</li>
+                    <li>lowers the chance of over-committing caravans to a tiny patch of resources</li>
+                </ul>
             </span>
         </div>
-        <div>Available {CaravanHTML} s: <span id="AvailableCaravans">???</span></div>
+        <table class="generic evenodd middle center">
+            <tr>
+                <th>Type</th>
+                <th>Available</th>
+            </tr>
+            <tr>
+                <td>{CaravanHTML}</td>
+                <td id="AvailableCaravans">???</td>
+            </tr>
+            <tr>
+                <td>{CotterHTML}</td>
+                <td id="AvailableCotters">???</td>
+            </tr>
+        </table>
         <div>Filters:
             <input class="MarketHelperCheck" type="checkbox" value="1" checked /> {WoodHTML}
             <input class="MarketHelperCheck" type="checkbox" value="2" checked /> {ClayHTML}
@@ -39,6 +58,9 @@
             <input class="MarketHelperCheck" type="checkbox" value="4" checked /> {StoneHTML}
             <input class="MarketHelperCheck" type="checkbox" value="5" checked /> {FoodHTML}
             <input class="MarketHelperCheck" type="checkbox" value="6" checked /> {GoldHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="7" checked /> {HidesHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="8" checked /> {HerbsHTML}
+            <input class="MarketHelperCheck" type="checkbox" value="9" checked /> {MineralsHTML}
         </div>
         <table id="MarketHelperTable" class="generic evenodd middle center">
             <tr>
@@ -48,6 +70,6 @@
                 <th>Action</th>
             </tr>
         </table>
-        <div id="MarketHelperSpinner" class="ui-autocomplete-loading"></div>
+        <div id="MarketHelperSpinner" class="ui-autocomplete-loading" style="display:none"></div>
     </div>
 </div>
