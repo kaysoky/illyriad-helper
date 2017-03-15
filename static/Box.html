@@ -39,34 +39,37 @@
         </div>
         <table class="generic evenodd middle center">
             <tr>
-                <th>Type</th>
-                <th>Available</th>
+                <th style="width:15%">Type</th>
+                <th style="width:15%">Available</th>
+                <th>Filters</th>
             </tr>
             <tr>
                 <td>{CaravanHTML}</td>
                 <td id="AvailableCaravans">???</td>
+                <td>
+                    <input class="MarketHelperCheck" type="checkbox" value="1" checked /> {WoodHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="2" checked /> {ClayHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="3" checked /> {IronHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="4" checked /> {StoneHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="5" checked /> {FoodHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="6" checked /> {GoldHTML}
+                </td>
             </tr>
             <tr>
                 <td>{CotterHTML}</td>
                 <td id="AvailableCotters">???</td>
+                <td>
+                    <input class="MarketHelperCheck" type="checkbox" value="7" checked /> {HidesHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="8" checked /> {HerbsHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="9" checked /> {MineralsHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="10" checked /> {EquipHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="14" checked /> {GrapesHTML}
+                </td>
             </tr>
         </table>
         <div style="text-align:center">
-            <input class="MarketHelperCheck" type="checkbox" value="1" checked /> {WoodHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="2" checked /> {ClayHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="3" checked /> {IronHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="4" checked /> {StoneHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="5" checked /> {FoodHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="6" checked /> {GoldHTML}
-            <br>
-            <input class="MarketHelperCheck" type="checkbox" value="7" checked /> {HidesHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="8" checked /> {HerbsHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="9" checked /> {MineralsHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="10" checked /> {EquipHTML}
-            <input class="MarketHelperCheck" type="checkbox" value="14" checked /> {GrapesHTML}
-            <br>
             Zoom level: <input id="MarketZoomLevel" type="textfield" value="12" />
-            Search <i>radius</i>: <input id="MarketSearchRadius" type="textfield" value="3" />
+            | Search <i>radius</i>: <input id="MarketSearchRadius" type="textfield" value="3" />
         </div>
         <table id="MarketHelperTable" class="generic evenodd middle center">
             <tr>
