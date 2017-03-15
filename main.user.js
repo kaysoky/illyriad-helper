@@ -110,10 +110,27 @@ function PlaceButtons() {
     });
 
     // Install the Market Helper filter checkboxes
-    $('#MarketHelperBox').find('.MarketHelperCheck').click(function () {
-        var resource = $(this).attr('value');
+    function MarketCheckboxHandler() {
+        function ToClassArray(elem, index) {
+            return '.MarketHelperRow-' + $(elem).attr('value');
+        }
 
-        $('#MarketHelperTable').find('.MarketHelperRow-' + resource).toggle();
+        var shown = $.map(
+            $('#MarketHelperBox').find('.MarketHelperCheck:checked'),
+            ToClassArray).join(',');
+        var hidden = $.map(
+            $('#MarketHelperBox').find('.MarketHelperCheck').not(':checked'),
+            ToClassArray).join(',');
+
+        $('#MarketHelperTable').find(hidden).hide();
+        $('#MarketHelperTable').find(shown).show();
+    }
+    $('#MarketHelperBox').find('.MarketHelperCheck').click(MarketCheckboxHandler);
+    $('#MarketHelperBox').find('.MarketHelperCheck-row').click(function () {
+        $(this).parent().parent().find('.MarketHelperCheck')
+            .prop('checked', $(this).prop('checked'));
+
+        MarketCheckboxHandler();
     });
 }
 
