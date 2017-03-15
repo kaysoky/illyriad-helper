@@ -101,13 +101,8 @@ function PlaceButtons() {
         $('#MarketHelperBox').show();
     });
 
-    // Install the top-level Market helper button listeners
-    $('#CaravanResourceFinder').click(function () {
-        MarketHelper('Caravan');
-    });
-    $('#CotterResourceFinder').click(function () {
-        MarketHelper('Cotter');
-    });
+    // Install the top-level Market helper listener(s)
+    $('#RefreshResourceFinder').click(MarketHelper);
 
     // Install the Market Helper filter checkboxes
     function MarketCheckboxHandler() {

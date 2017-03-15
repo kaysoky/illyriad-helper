@@ -5,13 +5,10 @@
     </div>
     <div id="MarketHelperBox" style="display:none">
         <div class="subLinks">
-            <a id="CaravanResourceFinder"> Caravan
-                <img src="//assets.illyriad.net/img/icons/trade/caravan_24.png" />
-            </a>
-            <a id="CotterResourceFinder"> Cotter
-                <img src="//assets.illyriad.net/img/icons/trade/peasant_dwarf2_24.png" />
-            </a>
-            Resource Finder
+            {CaravanHTML}
+            {CotterHTML}
+            <a>Resource Finder</a>
+            <input id="RefreshResourceFinder" type="submit" class="short" value="Refresh!" />
         </div>
         <div style="margin-left:10px;margin-right:10px">
             <span style="text-align:justify;">
@@ -73,10 +70,30 @@
                     <input class="MarketHelperCheck-row" type="checkbox" checked />
                 </td>
             </tr>
+            <tr>
+                <td>Specialists</td>
+                <td>
+                    <span id="AvailableSkinners">?</span> |
+                    <span id="AvailableHerbalists">?</span> |
+                    <span id="AvailableMiners">?</span>
+                </td>
+                <td>
+                    <input class="MarketHelperCheck" type="checkbox" value="11" checked /> {SaltsHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="15" checked /> {PawsHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="12" checked /> {RareHerbsHTML}
+                    <input class="MarketHelperCheck" type="checkbox" value="13" checked /> {GemsHTML}
+                </td>
+                <td>
+                    <input class="MarketHelperCheck-row" type="checkbox" checked />
+                </td>
+            </tr>
         </table>
         <div style="text-align:center">
-            Zoom level: <input id="MarketZoomLevel" type="textfield" value="12" />
-            | Search <i>radius</i>: <input id="MarketSearchRadius" type="textfield" value="3" />
+            Zoom level:
+            <input id="MarketZoomLevel" type="textfield" style="width:2em" value="12" />
+            |
+            Search <i>radius</i>:
+            <input id="MarketSearchRadius" type="textfield" style="width:2em" value="3" />
         </div>
         <table id="MarketHelperTable" class="generic evenodd middle center">
             <tr>

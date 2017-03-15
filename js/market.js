@@ -49,13 +49,14 @@ function ForEachTown(lambda, continuation) {
     SwitchTown(towns.pop(), TownLooper);
 }
 
-// Fills in the market table based on the "target", which is either
-// "Caravan" or "Cotter".  Different resources will show up in the table
-function MarketHelper(target) {
+// Fills in the market table with all resources nearby
+function MarketHelper() {
     $('#MarketHelperSpinner').show();
 
     // Reset the filter checkboxes
-    $('#MarketHelperBox').find('.MarketHelperCheck').prop('checked', true);
+    $('#MarketHelperBox')
+        .find('.MarketHelperCheck, .MarketHelperCheck-row')
+        .prop('checked', true);
 
     // Clean up the table of resources
     $('#MarketHelperTable tr').not(':first').remove();
@@ -193,58 +194,39 @@ function MarketHelper(target) {
                 return [rX, rY, distance];
             }
 
-            // Populate the caravan-compatible resources
-            if (target === 'Caravan') {
-                for (var bunch in data.n) {
-                    if (!CheckAvailability(bunch)) {
-                        continue;
-                    }
-
-                    var [rX, rY, distance] = ParseCoordinates(bunch);
-                    var type = parseInt(data.n[bunch].i);
-
-                    if (type > 0 && type <= 6) {
-                        resources.push({
-                            'distance' : distance,
-                            'data' : '<tr class="MarketHelperRow-' + type + '">'
-                                + '<td><a href="#/World/Map/' + rX + '/' + rY + '">' + rX + '|' + rY + '</a></td>'
-                                + '<td>' + distance + '</td>'
-                                + '<td>' + ResourceIcons[type] + '</td>'
-                                + '<td>'
-                                    + '<input class="short MarketHelperButton" '
-                                        + 'type="submit" '
-                                        + 'value="Send!" '
-                                        + 'query="'
-                                            + 'SendX=' + rX
-                                            + '&SendY=' + rY
-                                            + '&UnitId=1'
-                                            + '&Quantity=1'
-                                    + '" />'
-                                + '</td>'
-                            + '</tr>'
-                        });
-                    }
+            // Combine the two resource lists (caravan and non-caravan)
+            var notables = data.n;
+            for (var bunch in data.d) {
+                if (!notables[bunch]) {
+                    notables[bunch] = {};
                 }
+
+                notables[bunch].flags = data.d[bunch];
             }
 
-            // Populate the cotter, miner, herbalist, or skinner resources
-            if (target === 'Cotter') {
-                for (var bunch in data.d) {
-                    if (!CheckAvailability(bunch)) {
-                        continue;
+            for (var bunch in notables) {
+                if (!CheckAvailability(bunch)) {
+                    continue;
+                }
+
+                var [rX, rY, distance] = ParseCoordinates(bunch);
+
+                // Holds the resource icons and buttons to generate for this row
+                var enums = [];
+                var units = new Set();
+
+                // Populate the caravan-compatible resources
+                if (notables[bunch].i) {
+                    var type = parseInt(notables[bunch].i);
+                    if (type > 0 && type <= 6) {
+                        enums.push(type);
+                        units.add('Caravan');
                     }
+                }
 
-                    var [rX, rY, distance] = ParseCoordinates(bunch);
-
-                    var flags = data.d[bunch].split('|');
-                    var images = '';
-                    var enums = ['', ];
-                    var forCotter = false;
-                    var forSkinner = false;
-                    var forHerbalist = false;
-                    var forMiner = false;
-
-                    // Map the data to the respective image and worker type
+                // Populate the cotter, miner, herbalist, or skinner resources
+                if (notables[bunch].flags) {
+                    var flags = notables[bunch].flags.split('|');
                     for (var i = 0; i < 9; i++) {
                         if (flags[i] === '0') {
                             continue;
@@ -252,80 +234,77 @@ function MarketHelper(target) {
 
                         switch (i) {
                             case 0:
-                                images += HidesHTML;
                                 enums.push(7);
-                                forCotter = true;
+                                units.add('Cotter');
                                 break;
                             case 1:
-                                images += HerbsHTML;
                                 enums.push(8);
-                                forCotter = true;
+                                units.add('Cotter');
                                 break;
                             case 2:
-                                images += MineralsHTML;
                                 enums.push(9);
-                                forCotter = true;
+                                units.add('Cotter');
                                 break;
                             case 3:
-                                images += EquipHTML;
                                 enums.push(10);
-                                forCotter = true;
+                                units.add('Cotter');
                                 break;
                             case 4:
-                                images += SaltsHTML;
                                 enums.push(11);
-                                forSkinner = true;
+                                // units.add('Skinner');
                                 break;
                             case 5:
-                                images += RareHerbsHTML;
                                 enums.push(12);
-                                forHerbalist = true;
+                                // units.add('Herbalist');
                                 break;
                             case 6:
-                                images += GemsHTML;
                                 enums.push(13);
-                                forMiner = true;
+                                // units.add('Miner');
                                 break;
                             case 7:
-                                images += GrapesHTML;
                                 enums.push(14);
-                                forCotter = true;
+                                units.add('Cotter');
                                 break;
                             case 8:
-                                images += PawsHTML;
                                 enums.push(15);
-                                forSkinner = true;
+                                // units.add('Skinner');
                                 break;
                         }
                     }
-
-                    var buttons = '';
-                    if (forCotter) {
-                        buttons +=
-                            '<input class="short MarketHelperButton" '
-                                + 'type="submit" '
-                                + 'value="Cotter" '
-                                + 'query="'
-                                    + 'SendX=' + rX
-                                    + '&SendY=' + rY
-                                    + '&UnitId=683'
-                                    + '&Quantity=1'
-                            + '" />'
-                    } else {
-                        continue;
-                    }
-                    // TODO: Add buttons for Skinners, Herbalists, and Miners
-
-                    resources.push({
-                        'distance' : distance,
-                        'data' : '<tr class="' + enums.join(' MarketHelperRow-') + '">'
-                            + '<td><a href="#/World/Map/' + rX + '/' + rY + '">' + rX + '|' + rY + '</a></td>'
-                            + '<td>' + distance + '</td>'
-                            + '<td>' + images + '</td>'
-                            + '<td>' + buttons + '</td>'
-                        + '</tr>'
-                    });
                 }
+
+                // Convert the `enums` and `units` into a table row
+                resources.push({
+                    'distance' : distance,
+                    'data' : '<tr class="'
+                                + enums.reduce(function (acc, next) {
+                                    return acc + ' MarketHelperRow-' + next;
+                                }, '')
+                            + '">'
+                        + '<td><a href="#/World/Map/' + rX + '/' + rY + '">' + rX + '|' + rY + '</a></td>'
+                        + '<td>' + distance + '</td>'
+                        + '<td>'
+                            + enums.reduce(function (acc, next) {
+                                return acc + ResourceIcons[next];
+                            }, '')
+                        + '</td>'
+                        + '<td>'
+                            + Array.from(units).reduce(function (acc, next) {
+                                var unit = { 'Caravan' : 1, 'Cotter' : 683 }[next];
+                                return acc +
+                                    '<input class="short MarketHelperButton" '
+                                        + 'type="submit" '
+                                        + 'value="' + next + '" '
+                                        + 'query="'
+                                            + 'SendX=' + rX
+                                            + '&SendY=' + rY
+                                            + '&UnitId=' + unit
+                                            + '&Quantity=1'
+                                    + '" />'
+                            }, '')
+                        + '</td>'
+                    + '</tr>'
+                });
             }
 
             // Once all the results are in, fill in the table
