@@ -53,11 +53,6 @@ function ForEachTown(lambda, continuation) {
 function MarketHelper() {
     $('#MarketHelperSpinner').show();
 
-    // Reset the filter checkboxes
-    $('#MarketHelperBox')
-        .find('.MarketHelperCheck, .MarketHelperCheck-row')
-        .prop('checked', true);
-
     // Clean up the table of resources
     $('#MarketHelperTable tr').not(':first').remove();
 
@@ -73,7 +68,7 @@ function MarketHelper() {
 
     var [X, Y] = GetTownCoordinates();
 
-    // Figure out the number of free caravans
+    // Figure out the number of free gatherers
     $.ajax({
         type: 'POST',
         url: '/Trade/PopupHarvesting',
@@ -88,7 +83,7 @@ function MarketHelper() {
             if (data[i].Name === 'Caravan') {
                 caravans = data[i].Available;
 
-            // TODO: Use this to determine the "UnitId" of the cotter
+            // TODO: Use this to determine the "UnitId" of the gatherer
             // There is a different ID for each race
             } else if (data[i].Name === 'Cotter') {
                 cotters = data[i].Available;
@@ -101,10 +96,10 @@ function MarketHelper() {
         $('#AvailableCotters').text(cotters);
         $('#AvailableSkinners').text(skinners);
     }).fail(function () {
-        alert('Failed to figure out number of free caravans');
+        alert('Failed to figure out number of free gatherers');
     });
 
-    // Figure out what caravans are currently enroute
+    // Figure out what gatherers are currently enroute
     var time = '_=' + (new Date).getTime();
     var outbound = new Set();
 
@@ -147,7 +142,7 @@ function MarketHelper() {
 
             continuation();
         }).fail(function () {
-            alert('Failed to fetch dispatched caravans');
+            alert('Failed to fetch dispatched gatherers');
         });
     }, function () {
         // Aggregator for the parsed world data
@@ -178,7 +173,7 @@ function MarketHelper() {
                     return false;
                 }
 
-                // Exclude resources that you are already sending a caravan towards
+                // Exclude resources that you are already sending a gatherer towards
                 if (outbound.has(bunch)) {
                     return false;
                 }
@@ -237,43 +232,18 @@ function MarketHelper() {
                             continue;
                         }
 
-                        switch (i) {
-                            case 0:
-                                enums.push(7);
-                                units.add('Cotter');
-                                break;
-                            case 1:
-                                enums.push(8);
-                                units.add('Cotter');
-                                break;
-                            case 2:
-                                enums.push(9);
-                                units.add('Cotter');
-                                break;
-                            case 3:
-                                enums.push(10);
-                                units.add('Cotter');
-                                break;
-                            case 4:
-                                enums.push(11);
-                                units.add('Skinner');
-                                break;
-                            case 5:
-                                enums.push(12);
-                                // units.add('Herbalist');
-                                break;
-                            case 6:
-                                enums.push(13);
-                                // units.add('Miner');
-                                break;
-                            case 7:
-                                enums.push(14);
-                                units.add('Cotter');
-                                break;
-                            case 8:
-                                enums.push(15);
-                                units.add('Skinner');
-                                break;
+                        // These reference the `ResourceIcons` list defined in
+                        // `main.user.js`, which starts at index 7
+                        enums.push(i + 7);
+
+                        if (i <= 3 || i === 7) {
+                            units.add('Cotter');
+                        } else if (i === 4 || i === 8) {
+                            units.add('Skinner');
+                        } else if (i === 5) {
+                            // units.add('Herbalist');
+                        } else if (i === 6) {
+                            // units.add('Miner');
                         }
                     }
                 }
