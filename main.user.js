@@ -22,6 +22,10 @@ var CotterHTML =
     '<span class="name" data="i=5|683">'
         + '<img src="//assets.illyriad.net/img/icons/trade/peasant_dwarf2_24.png" title="Cotters" />'
     + '</span>';
+var SkinnerHTML =
+    '<span class="name" data="i=5|684">'
+        + '<img src="//assets.illyriad.net/img/icons/trade/hunter_dwarf_24.png" title="Skinners">'
+    + '</span>';
 
 var GoldHTML = '<span class="name resIcon ico-gold" data="i=4|1" title="Gold"></span>';
 var WoodHTML = '<span class="name resIcon ico-wood" data="i=1|1" title="Wood"></span>';
@@ -60,6 +64,7 @@ var ResourceIcons = [
 var HTML_TEMPLATE = {
     'CaravanHTML'   : CaravanHTML,
     'CotterHTML'    : CotterHTML,
+    'SkinnerHTML'   : SkinnerHTML,
     'WoodHTML'      : WoodHTML,
     'ClayHTML'      : ClayHTML,
     'IronHTML'      : IronHTML,

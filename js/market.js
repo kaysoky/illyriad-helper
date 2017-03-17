@@ -82,19 +82,24 @@ function MarketHelper() {
     }).done(function (data) {
         var caravans = 0;
         var cotters = 0;
+        var skinners = 0;
 
         for (var i = 0; i < data.length; i++) {
             if (data[i].Name === 'Caravan') {
                 caravans = data[i].Available;
+
+            // TODO: Use this to determine the "UnitId" of the cotter
+            // There is a different ID for each race
             } else if (data[i].Name === 'Cotter') {
-                // TODO: Use this to determine the "UnitId" of the cotter
-                // There is a different ID for each race
                 cotters = data[i].Available;
+            } else if (data[i].Name === 'Skinner') {
+                skinners = data[i].Available;
             }
         }
 
         $('#AvailableCaravans').text(caravans);
         $('#AvailableCotters').text(cotters);
+        $('#AvailableSkinners').text(skinners);
     }).fail(function () {
         alert('Failed to figure out number of free caravans');
     });
@@ -251,7 +256,7 @@ function MarketHelper() {
                                 break;
                             case 4:
                                 enums.push(11);
-                                // units.add('Skinner');
+                                units.add('Skinner');
                                 break;
                             case 5:
                                 enums.push(12);
@@ -267,7 +272,7 @@ function MarketHelper() {
                                 break;
                             case 8:
                                 enums.push(15);
-                                // units.add('Skinner');
+                                units.add('Skinner');
                                 break;
                         }
                     }
@@ -290,7 +295,11 @@ function MarketHelper() {
                         + '</td>'
                         + '<td>'
                             + Array.from(units).reduce(function (acc, next) {
-                                var unit = { 'Caravan' : 1, 'Cotter' : 683 }[next];
+                                var unit = {
+                                    'Caravan' : 1,
+                                    'Cotter' : 683,
+                                    'Skinner' : 684
+                                }[next];
                                 return acc +
                                     '<input class="short MarketHelperButton" '
                                         + 'type="submit" '
