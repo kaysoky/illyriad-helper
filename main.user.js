@@ -26,6 +26,10 @@ var SkinnerHTML =
     '<span class="name" data="i=5|684">'
         + '<img src="//assets.illyriad.net/img/icons/trade/hunter_dwarf_24.png" title="Skinners">'
     + '</span>';
+var HerbalistHTML =
+    '<span class="name" data="i=5|685">'
+        + '<img src="//assets.illyriad.net/img/icons/trade/herbgatherer_dwarf_24.png" title="Herbalist">'
+    + '</span>';
 var MinerHTML =
     '<span class="name" data="i=5|686">'
         + '<img src="//assets.illyriad.net/img/icons/trade/miner_dwarf_24.png" title="Miners">'
@@ -69,6 +73,7 @@ var HTML_TEMPLATE = {
     'CaravanHTML'   : CaravanHTML,
     'CotterHTML'    : CotterHTML,
     'SkinnerHTML'   : SkinnerHTML,
+    'HerbalistHTML' : HerbalistHTML,
     'MinerHTML'     : MinerHTML,
     'WoodHTML'      : WoodHTML,
     'ClayHTML'      : ClayHTML,

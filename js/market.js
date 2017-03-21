@@ -79,6 +79,7 @@ function MarketHelper() {
         var cotters = 0;
         var skinners = 0;
         var miners = 0;
+        var herbalists = 0;
 
         for (var i = 0; i < data.length; i++) {
             if (data[i].Name === 'Caravan') {
@@ -92,6 +93,8 @@ function MarketHelper() {
                 skinners = data[i].Available;
             } else if (data[i].Name === 'Miner') {
                 miners = data[i].Available;
+            } else if (data[i].Name === 'Herbalist') {
+                herbalists = data[i].Available;
             }
         }
 
@@ -99,6 +102,7 @@ function MarketHelper() {
         $('#AvailableCotters').text(cotters);
         $('#AvailableSkinners').text(skinners);
         $('#AvailableMiners').text(miners);
+        $('#AvailableHerbalists').text(herbalists);
     }).fail(function () {
         alert('Failed to figure out number of free gatherers');
     });
@@ -245,7 +249,7 @@ function MarketHelper() {
                         } else if (i === 4 || i === 8) {
                             units.add('Skinner');
                         } else if (i === 5) {
-                            // units.add('Herbalist');
+                            units.add('Herbalist');
                         } else if (i === 6) {
                             units.add('Miner');
                         }
@@ -273,6 +277,7 @@ function MarketHelper() {
                                     'Caravan' : 1,
                                     'Cotter' : 683,
                                     'Skinner' : 684,
+                                    'Herbalist' : 685,
                                     'Miner' : 686
                                 }[next];
                                 return acc +
