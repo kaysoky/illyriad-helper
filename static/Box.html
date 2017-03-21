@@ -11,7 +11,7 @@
         <div style="margin-left:10px;margin-right:10px">
             <span style="text-align:justify;">
                 This helper scans a square around the world map starting
-                from your selected city and filters out locations with
+                from your selected city and filters for locations with
                 gather-able resources.
                 <br><br>
                 The search automatically filters out resources that are:
@@ -19,14 +19,15 @@
                     <li>occupied by armies</li>
                     <li>occupied by other gatherers</li>
                     <li>claimed by sovereignty</li>
+                    <li>destinations of your own gatherers</li>
                 </ul>
-                This filtering helps you stay "polite" with your gathering.
-                <br><br>
-                Every time you click the <u><b>Send!</b></u> button, the helper
-                will dispatch a <b>single</b> gatherer to that location.
+                This filtering helps you stay "polite" and efficient with your gathering.
+                <br>
+                Every time you click any of the <input type="submit" class="short" value="buttons" />,
+                the helper will dispatch a <b>single</b> gatherer to that location.
                 Sending a single gatherer:
                 <ul>
-                    <li>maximizes your gathering speed</li>
+                    <li>maximizes your gathering speed (speed does not stack)</li>
                     <li>lowers the chance of all your gatherers being "interrupted"</li>
                     <li>lowers the chance of over-committing gatherers to a tiny patch of resources</li>
                 </ul>
@@ -35,8 +36,8 @@
         <form>
             <table class="generic evenodd middle center">
                 <tr>
-                    <th style="width:20%">Type</th>
-                    <th style="width:15%">Available</th>
+                    <th style="width:100px">Type</th>
+                    <th style="width:50px">Available</th>
                     <th>Filters</th>
                 </tr>
                 <tr>
@@ -85,10 +86,10 @@
             Search <i>radius</i>:
             <input id="MarketSearchRadius" type="textfield" style="width:2em" value="3" />
         </div>
-        <table id="MarketHelperTable" class="generic evenodd middle center">
-            <tr>
+        <table id="MarketHelperTable" class="generic middle center">
+            <tr style="border-bottom:solid">
                 <th>Coordinates</th>
-                <th>Distance</th>
+                <th>Distance <span id="MarketHelperCenter"></span></th>
                 <th>Resource</th>
                 <th>Action</th>
             </tr>

@@ -78,6 +78,11 @@ function MarketHelperMain() {
 
     var [X, Y] = GetTownCoordinates();
 
+    $('#MarketHelperCenter').html(
+        'to <a href="#/World/Map/' + X + '/' + Y + '">'
+            + $('#optTown option:selected').text()
+        + '</a>');
+
     // Holds a mapping between the Unit's name and ID
     // This is used to create the convenience buttons next to each resource
     UnitIDMapping = {};

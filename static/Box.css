@@ -12,3 +12,7 @@
     height           : 16px;
     background-color : transparent;
 }
+
+#MarketHelperTable tr {
+    border-bottom : solid thin;
+}
