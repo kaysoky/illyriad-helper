@@ -8,6 +8,7 @@
 // @grant       GM_getResourceText
 // @resource    Box_HTML static/Box.html
 // @resource    Box_CSS  static/Box.css
+// @require     js/mail.js
 // @require     js/market.js
 // @require     http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js
 // ==/UserScript==
@@ -128,6 +129,9 @@ function PlaceButtons() {
 
     // Load the special sidebar CSS
     GM_addStyle(GM_getResourceText('Box_CSS'));
+
+    // Enable the Mail helper
+    MailHelperMain();
 
     // Install the Market Helper button listener
     $('#MarketButton').click(function () {
