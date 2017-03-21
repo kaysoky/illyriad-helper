@@ -137,30 +137,7 @@ function PlaceButtons() {
 
     // Install the top-level Market helper listener(s)
     $('#RefreshResourceFinder').click(MarketHelperMain);
-
-    // Install the Market Helper filter checkboxes
-    function MarketCheckboxHandler() {
-        function ToClassArray(elem, index) {
-            return '.MarketHelperRow-' + $(elem).attr('value');
-        }
-
-        var shown = $.map(
-            $('#MarketHelperBox').find('.MarketHelperCheck:checked'),
-            ToClassArray).join(',');
-        var hidden = $.map(
-            $('#MarketHelperBox').find('.MarketHelperCheck').not(':checked'),
-            ToClassArray).join(',');
-
-        $('#MarketHelperTable').find(hidden).hide();
-        $('#MarketHelperTable').find(shown).show();
-    }
-    $('#MarketHelperBox').find('.MarketHelperCheck').click(MarketCheckboxHandler);
-    $('#MarketHelperBox').find('.MarketHelperCheck-row').click(function () {
-        $(this).parent().parent().find('.MarketHelperCheck')
-            .prop('checked', $(this).prop('checked'));
-
-        MarketCheckboxHandler();
-    });
+    $('#MarketHelperBox').find('input[name=MarketFilter]').click(MarketHelperFilterHandler);
 }
 
 // Run this stuff after the page is loaded

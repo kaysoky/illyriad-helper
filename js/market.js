@@ -49,6 +49,24 @@ function ForEachTown(lambda, continuation) {
     SwitchTown(towns.pop(), TownLooper);
 }
 
+// Event that should fire whenever a filter is clicked
+function MarketHelperFilterHandler() {
+    function ToClassArray(elem, index) {
+        return '.MarketHelperRow-' + $(elem).attr('value');
+    }
+
+    var filters = $('#MarketHelperBox').find('input[name=MarketFilter]');
+    var shown = $.map(
+        filters.filter(':checked'),
+        ToClassArray).join(',');
+    var hidden = $.map(
+        filters.not(':checked'),
+        ToClassArray).join(',');
+
+    $('#MarketHelperTable').find(hidden).hide();
+    $('#MarketHelperTable').find(shown).show();
+}
+
 // Fills in the market table with all resources nearby
 // There are several continuations of this function (written sequentially)
 var UnitIDMapping = {};
@@ -320,6 +338,10 @@ function GatherResources() {
                 $(this).parent().parent().remove();
             });
 
+            // Apply the resource filter
+            MarketHelperFilterHandler();
+
+            // And hide the spinner
             $('#MarketHelperSpinner').hide();
         }
     }

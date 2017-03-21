@@ -32,60 +32,52 @@
                 </ul>
             </span>
         </div>
-        <table class="generic evenodd middle center">
-            <tr>
-                <th style="width:20%">Type</th>
-                <th style="width:15%">Available</th>
-                <th>Filters</th>
-                <th style="width:10%">All</th>
-            </tr>
-            <tr>
-                <td>{CaravanHTML}</td>
-                <td id="AvailableCaravans">???</td>
-                <td>
-                    <input class="MarketHelperCheck" type="checkbox" value="1" checked /> {WoodHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="2" checked /> {ClayHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="3" checked /> {IronHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="4" checked /> {StoneHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="5" checked /> {FoodHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="6" checked /> {GoldHTML}
-                </td>
-                <td>
-                    <input class="MarketHelperCheck-row" type="checkbox" checked />
-                </td>
-            </tr>
-            <tr>
-                <td>{CotterHTML}</td>
-                <td id="AvailableCotters">???</td>
-                <td>
-                    <input class="MarketHelperCheck" type="checkbox" value="7" checked /> {HidesHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="8" checked /> {HerbsHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="9" checked /> {MineralsHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="10" checked /> {EquipHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="14" checked /> {GrapesHTML}
-                </td>
-                <td>
-                    <input class="MarketHelperCheck-row" type="checkbox" checked />
-                </td>
-            </tr>
-            <tr>
-                <td>{SkinnerHTML} {HerbalistHTML} {MinerHTML}</td>
-                <td>
-                    <span id="AvailableSkinners">?</span> |
-                    <span id="AvailableHerbalists">?</span> |
-                    <span id="AvailableMiners">?</span>
-                </td>
-                <td>
-                    <input class="MarketHelperCheck" type="checkbox" value="11" checked /> {SaltsHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="15" checked /> {PawsHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="12" checked /> {RareHerbsHTML}
-                    <input class="MarketHelperCheck" type="checkbox" value="13" checked /> {GemsHTML}
-                </td>
-                <td>
-                    <input class="MarketHelperCheck-row" type="checkbox" checked />
-                </td>
-            </tr>
-        </table>
+        <form>
+            <table class="generic evenodd middle center">
+                <tr>
+                    <th style="width:20%">Type</th>
+                    <th style="width:15%">Available</th>
+                    <th>Filters</th>
+                </tr>
+                <tr>
+                    <td>{CaravanHTML}</td>
+                    <td id="AvailableCaravans">???</td>
+                    <td>
+                        <input name="MarketFilter" type="radio" value="1" /> {WoodHTML}
+                        <input name="MarketFilter" type="radio" value="2" /> {ClayHTML}
+                        <input name="MarketFilter" type="radio" value="3" /> {IronHTML}
+                        <input name="MarketFilter" type="radio" value="4" /> {StoneHTML}
+                        <input name="MarketFilter" type="radio" value="5" /> {FoodHTML}
+                        <input name="MarketFilter" type="radio" value="6" checked /> {GoldHTML}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{CotterHTML}</td>
+                    <td id="AvailableCotters">???</td>
+                    <td>
+                        <input name="MarketFilter" type="radio" value="7"  /> {HidesHTML}
+                        <input name="MarketFilter" type="radio" value="8"  /> {HerbsHTML}
+                        <input name="MarketFilter" type="radio" value="9"  /> {MineralsHTML}
+                        <input name="MarketFilter" type="radio" value="10" /> {EquipHTML}
+                        <input name="MarketFilter" type="radio" value="14" /> {GrapesHTML}
+                    </td>
+                </tr>
+                <tr>
+                    <td>{SkinnerHTML} {HerbalistHTML} {MinerHTML}</td>
+                    <td>
+                        <span id="AvailableSkinners">?</span> |
+                        <span id="AvailableHerbalists">?</span> |
+                        <span id="AvailableMiners">?</span>
+                    </td>
+                    <td>
+                        <input name="MarketFilter" type="radio" value="11" /> {SaltsHTML}
+                        <input name="MarketFilter" type="radio" value="15" /> {PawsHTML}
+                        <input name="MarketFilter" type="radio" value="12" /> {RareHerbsHTML}
+                        <input name="MarketFilter" type="radio" value="13" /> {GemsHTML}
+                    </td>
+                </tr>
+            </table>
+        </form>
         <div style="text-align:center">
             Zoom level:
             <input id="MarketZoomLevel" type="textfield" style="width:2em" value="12" />
