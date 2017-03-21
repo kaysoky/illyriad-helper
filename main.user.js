@@ -18,22 +18,13 @@ var CaravanHTML =
     '<span class="name" data="i=5|1">'
         + '<img src="//assets.illyriad.net/img/icons/trade/caravan_24.png" title="Caravans" />'
     + '</span>';
-var CotterHTML =
-    '<span class="name" data="i=5|683">'
-        + '<img src="//assets.illyriad.net/img/icons/trade/peasant_dwarf2_24.png" title="Cotters" />'
-    + '</span>';
-var SkinnerHTML =
-    '<span class="name" data="i=5|684">'
-        + '<img src="//assets.illyriad.net/img/icons/trade/hunter_dwarf_24.png" title="Skinners">'
-    + '</span>';
-var HerbalistHTML =
-    '<span class="name" data="i=5|685">'
-        + '<img src="//assets.illyriad.net/img/icons/trade/herbgatherer_dwarf_24.png" title="Herbalist">'
-    + '</span>';
-var MinerHTML =
-    '<span class="name" data="i=5|686">'
-        + '<img src="//assets.illyriad.net/img/icons/trade/miner_dwarf_24.png" title="Miners">'
-    + '</span>';
+
+var IconHTMLPrefix = '<img src="//assets.illyriad.net/img/icons/trade/'
+var CotterBody = 'peasant_';
+var SkinnerBody = 'hunter_';
+var HerbalistBody = 'herbgatherer_';
+var MinerBody = 'miner_';
+var IconHTMLSuffix = '_24.png" />';
 
 var GoldHTML = '<span class="name resIcon ico-gold" data="i=4|1" title="Gold"></span>';
 var WoodHTML = '<span class="name resIcon ico-wood" data="i=1|1" title="Wood"></span>';
@@ -71,10 +62,6 @@ var ResourceIcons = [
 
 var HTML_TEMPLATE = {
     'CaravanHTML'   : CaravanHTML,
-    'CotterHTML'    : CotterHTML,
-    'SkinnerHTML'   : SkinnerHTML,
-    'HerbalistHTML' : HerbalistHTML,
-    'MinerHTML'     : MinerHTML,
     'WoodHTML'      : WoodHTML,
     'ClayHTML'      : ClayHTML,
     'IronHTML'      : IronHTML,
@@ -97,8 +84,40 @@ String.prototype.replaceAll = function (search, replace) {
     return target.replace(new RegExp(search, 'g'), replace);
 }
 
-// This runs when the page has loaded
-// It places the sidebar and installs the primary event listeners
+// This is the first thing that runs when the page has loaded
+function Initialize() {
+    // Figure out the player's race
+    var time = '_=' + (new Date).getTime();
+    $.ajax({
+        type: 'POST',
+        url: '/Town/Castle?' + time,
+        async: true,
+        data: time
+    }).done(function (data) {
+        var race = $(data).find('td:contains("Race")')
+            .parent()
+            .find('td').filter(':last')
+            .text().toLowerCase();
+
+        // For some reason, some of the images for Dwarves and Orcs don't
+        // follow the same URL pattern as the other races
+        var cotterSuffix = '';
+        if (race === 'dwarf' || race === 'orc') {
+            cotterSuffix = '2';
+        }
+
+        // Fill in the image URLs for the special gatherers
+        HTML_TEMPLATE['CotterHTML']    = IconHTMLPrefix + CotterBody    + race + cotterSuffix + IconHTMLSuffix;
+        HTML_TEMPLATE['SkinnerHTML']   = IconHTMLPrefix + SkinnerBody   + race + IconHTMLSuffix;
+        HTML_TEMPLATE['HerbalistHTML'] = IconHTMLPrefix + HerbalistBody + race + IconHTMLSuffix;
+        HTML_TEMPLATE['MinerHTML']     = IconHTMLPrefix + MinerBody     + race + IconHTMLSuffix;
+
+        // Continue on to place the helper in the UI
+        PlaceButtons();
+    });
+}
+
+// This places the sidebar and installs the primary event listeners
 function PlaceButtons() {
     // Load the sidebar HTML template and fill in the values
     var sidebar = GM_getResourceText('Box_HTML');
@@ -117,7 +136,7 @@ function PlaceButtons() {
     });
 
     // Install the top-level Market helper listener(s)
-    $('#RefreshResourceFinder').click(MarketHelper);
+    $('#RefreshResourceFinder').click(MarketHelperMain);
 
     // Install the Market Helper filter checkboxes
     function MarketCheckboxHandler() {
@@ -145,4 +164,4 @@ function PlaceButtons() {
 }
 
 // Run this stuff after the page is loaded
-addEventListener('DOMContentLoaded', PlaceButtons, false);
+addEventListener('DOMContentLoaded', Initialize, false);

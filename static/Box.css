@@ -1,5 +1,5 @@
 #IllyHelperBox {
-    position   : absolute;
+    position   : fixed;
     top        : 0px;
     left       : 1020px;
     height     : calc(100% - 20px);
